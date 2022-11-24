@@ -1,6 +1,7 @@
 <script lang="ts">
     import GoogleLogin from "../Buttons/GoogleLogin.svelte";
     import ImageComponent from "../Components/ImageComponent.svelte";
+    import link from 'svelte-spa-router';
 </script>
 
 <main>

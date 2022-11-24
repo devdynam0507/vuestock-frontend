@@ -6,5 +6,5 @@
 </script>
 
 <div width={width} height={height}>
-    <img {src} {alt}/>
+    <img {width} {height} {src} {alt}/>
 </div>
