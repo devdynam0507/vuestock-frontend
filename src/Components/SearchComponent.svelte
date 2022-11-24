@@ -2,7 +2,6 @@
 	<link rel="stylesheet" href="https://unpkg.com/mono-icons@1.0.5/iconfont/icons.css" >
 </svelte:head>
 <script lang="ts">
-    let focus: boolean = false;
 </script>
 <style>
     .search {
@@ -36,6 +35,6 @@
 
 <div class="search">
     <i class="mi mi-search"></i>
-    <input type="text" on:focusin={() => focus = true} on:focusout={() => focus = false}>
+    <input type="text">
 </div>
 
