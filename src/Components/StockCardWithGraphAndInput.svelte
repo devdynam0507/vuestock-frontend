@@ -1,14 +1,17 @@
 <script lang="ts">
     import ApexCharts from 'apexcharts'
     import { onMount } from 'svelte';
-    import StockCardInfoDefault from './StockCardInfoDefault.svelte';
-    export let stockName: string;
-    export let stockCurrentPrice: number;
-    export let isRise: boolean;
-    export let stockPrice: number;
-    export let volatility: number;
 
-    const color = isRise ? '#F23343' : 'blue';
+    export let isRise: boolean;
+    const color = isRise ? '#F23343' : '#2175EB';
+    const uuid = 'chart-' + uuidv4().replaceAll('-', '')
+  
+    function uuidv4() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
 
     onMount(() => {
         const options = {
@@ -77,17 +80,9 @@
             }
         };
 
-        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        var chart = new ApexCharts(document.querySelector(`#${uuid}`), options);
         chart.render();
     })
 </script>
-
-<StockCardInfoDefault 
-    stockName={stockName}
-    stockCurrentPrice={stockCurrentPrice}
-    isRise={isRise}
-    stockPrice={stockPrice}
-    volatility={volatility}
-/>
-<div id="chart">
+<div id="{uuid}">
 </div>
