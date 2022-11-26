@@ -6,6 +6,7 @@
     import SearchComponent from "../Components/SearchComponent.svelte";
     import StockCardDefault from "../Components/StockCardDefault.svelte";
     import StockCardInfoDefault from "../Components/StockCardInfoDefault.svelte";
+    import StockCardWithGraphAndInput from "../Components/StockCardWithGraphAndInput.svelte";
 </script>
 
 <div class="content">
@@ -59,7 +60,20 @@
                 </StockCardDefault>
             </div>
         </div>
-        <NoInterested/>
+        <div class="popular-container">
+            <p>관심 종목</p>
+            <div class="popular-list">
+                <StockCardDefault>
+                    <StockCardWithGraphAndInput
+                        stockName={"메가스터디 교육"}
+                        stockCurrentPrice={79800}
+                        isRise={true}
+                        stockPrice={1200}
+                        volatility={4.2}/>
+                </StockCardDefault>
+            </div>
+        </div>
+        <!-- <NoInterested/> -->
     </div>
 </div>
 
@@ -72,7 +86,7 @@
     }
 
     .content-body {
-        width: 50%;
+        width: 70%;
         height: 100%;
     }
 

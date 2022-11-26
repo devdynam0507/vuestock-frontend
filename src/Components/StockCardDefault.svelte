@@ -3,7 +3,8 @@
 <style>
     .card-default {
         display: flex;
-        height: 80px;
+        /* height: 80px; */
+        height: fit-content;
         border-radius: 10px;
         border: 1px solid rgba(0, 0, 0, 0.1);
         padding: 20px;
