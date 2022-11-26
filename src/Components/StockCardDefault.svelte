@@ -3,7 +3,9 @@
 <style>
     .card-default {
         display: flex;
-        height: 80px;
+        flex-direction: column;
+        /* height: 80px; */
+        height: fit-content;
         border-radius: 10px;
         border: 1px solid rgba(0, 0, 0, 0.1);
         padding: 20px;
@@ -26,13 +28,21 @@
         font-size: large;
         cursor: pointer;
     }
+    
+    .card-default .header {
+        display: flex;
+    }
 </style>
 
 <div class="card-default">
-    <div class="left">
-        <slot></slot>
+    <div class="header">
+        <div class="left">
+            <slot name="header"></slot>
+        </div>
+        <div class="right">
+            <i class="mi mi-pin"></i>
+        </div>
     </div>
-    <div class="right">
-        <i class="mi mi-pin"></i>
-    </div>
+    <slot name="graph"></slot>
+    <slot name="input"></slot>
 </div>
