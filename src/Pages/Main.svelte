@@ -79,11 +79,12 @@
                     />
                     <StockCardWithGraphAndInput
                         slot="graph"
-                        isRise={true}/>
+                        isRise={true}
+                        stockCode={"005930"}/>
                     <StockCardAlarmInput slot="input"/>
                 </StockCardDefault>
 
-                <StockCardDefault>
+                <!-- <StockCardDefault>
                     <StockCardInfoDefault 
                         slot="header"
                         stockName={"삼성전자"}
@@ -94,9 +95,10 @@
                     />
                     <StockCardWithGraphAndInput
                         slot="graph"
-                        isRise={false}/>
+                        isRise={false}
+                        stockCode={"005930"}/>
                     <StockCardAlarmInput slot="input"/>
-                </StockCardDefault>
+                </StockCardDefault> -->
             </div>
         </div>
         <!-- <NoInterested/> -->

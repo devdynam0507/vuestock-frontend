@@ -1,24 +1,82 @@
 <script lang="ts">
     import ApexCharts from 'apexcharts'
     import { onMount } from 'svelte';
+    import { generateUUID4 } from '../Service/UUIDGeneratorService';
+    import { Scheduler } from '../Service/Scheduler';
+    import { StockDistributionUpdater } from '../Service/StockDistributionService';
+    import { StockCurrentPriceResponse, StockDistributionResponse, getCurrentStock } from '../Api/Stock';
+    import type { ErrorResponse } from '../Api/common/CommonDtos';
 
     export let isRise: boolean;
-    const color = isRise ? '#F23343' : '#2175EB';
-    const uuid = 'chart-' + uuidv4().replaceAll('-', '')
-  
-    function uuidv4() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
-    }
+    export let stockCode: string;
 
-    onMount(() => {
+    let data = [];
+    const color: string = isRise ? '#F23343' : '#2175EB';
+    const uuid: string = 'chart-' + generateUUID4().replaceAll('-', '')
+    let min: number = 0;
+    let max: number = 30;
+    let chart = null;
+
+    const cron: Scheduler = new Scheduler({
+        intervalSeconds: 60,
+        jobFunction: async () => {
+            if (chart === null) {
+                return;
+            }
+            const currentStock = await getCurrentStock(stockCode);
+            if (!(currentStock instanceof StockCurrentPriceResponse)) {
+                return;
+            }
+            if (currentStock.currentPrice === -1) {
+                return;
+            }
+            data.push([new Date().getTime(), currentStock.currentPrice]);
+            chart.updateSeries([{
+                name: "stocks",
+                data: data
+            }])
+        }
+    });
+    const distributionSubscriber = async (distribution: StockDistributionResponse | ErrorResponse) => {
+        if (!(distribution instanceof StockDistributionResponse)) {
+            return;
+        }
+        if (chart === null) {
+            return;
+        }
+        distribution.distributions.sort((a, b) => {
+            return a.timeMills - b.timeMills;
+        }).forEach((v: StockCurrentPriceResponse) => {
+            data.push([v.timeMills, v.currentPrice]);
+        })
+        chart.updateSeries([{
+            name: "stocks",
+            data: data
+        }]);        
+    }
+    const stockDistributionUpdater: StockDistributionUpdater = 
+        new StockDistributionUpdater(stockCode, distributionSubscriber);
+
+    onMount(async () => {
         const options = {
             colors: [color],
             chart: {
+                events: {
+                    beforeZoom: function(ctx) {
+                        // we need to clear the range as we only need it on the iniital load.
+                        ctx.w.config.xaxis.range = undefined
+                    },
+                },
                 toolbar: {
-                    show: false,
+                    show: true,
+                        tools: {
+                        zoom: false,
+                        zoomin: true,
+                        zoomout: true,
+                        pan: true,
+                        reset: false,
+                        download: false
+                    },
                 },
                 height: 100,
                 type: "area",
@@ -27,14 +85,15 @@
                 },
                 parentHeightOffset: 0,
                 parentWeightOffset: 0,
+                autoSelected: 'pan' 
             },
             dataLabels: {
                 enabled: false
             },
             series: [
                 {
-                    name: "Timeline",
-                    data: [45, 52, 38, 45, 19, 23, 2] // TODO: 시계열 데이터
+                    name: "stocks",
+                    data
                 }
             ],
             fill: {
@@ -47,7 +106,6 @@
                     inverseColors: true,
                     opacityFrom: 0.9,
                     opacityTo: 0.0,
-                    // stops: [0, 50, 100],
                     colorStops: []
                 }
             },
@@ -59,29 +117,34 @@
                 }
             },
             xaxis: {
+                type: 'datetime',
+                tickAmount: 6,
                 labels: {
-                    show: false
+                    datetimeUTC: false,
+                    show: true
                 },
             },
             yaxis: {
-                show: false,
+                type: 'numeric',
                 labels: {
                     show: false
                 }
             },
             tooltip: {
+                enabled: false,
                 x: {
                     format: 'dd MMM',
                     formatter: undefined,
                 },
                 y: {
-                    formatter: (value) => { return value + "%" },
+                    // formatter: (value) => { return value + "%" },
                 },        
             }
         };
-
-        var chart = new ApexCharts(document.querySelector(`#${uuid}`), options);
+        chart = new ApexCharts(document.querySelector(`#${uuid}`), options);
         chart.render();
+        await stockDistributionUpdater.update();
+        await cron.startSchedule();
     })
 </script>
 <div id="{uuid}">
