@@ -8,6 +8,7 @@
     import StockCardDefault from "../Components/StockCardDefault.svelte";
     import StockCardInfoDefault from "../Components/StockCardInfoDefault.svelte";
     import StockCardWithGraphAndInput from "../Components/StockCardWithGraphAndInput.svelte";
+    import PinIcon from "../Icons/PinIcon.svelte";
 </script>
 
 <div class="content">
@@ -32,6 +33,11 @@
                         stockPrice={1200}
                         volatility={4.2}
                     />
+                    <PinIcon
+                        slot="pin"
+                        isPinned={false}
+                        stockCode={"005920"}
+                    />
                 </StockCardDefault>
                 <StockCardDefault>
                     <StockCardInfoDefault 
@@ -42,15 +48,10 @@
                         stockPrice={1200}
                         volatility={4.2}
                     />
-                </StockCardDefault>
-                <StockCardDefault>
-                    <StockCardInfoDefault 
-                        slot="header"
-                        stockName={"메가스터디 교육"}
-                        stockCurrentPrice={79800}
-                        isRise={true}
-                        stockPrice={1200}
-                        volatility={4.2}
+                    <PinIcon
+                        slot="pin"
+                        isPinned={true}
+                        stockCode={"005920"}
                     />
                 </StockCardDefault>
                 <StockCardDefault>
@@ -61,6 +62,26 @@
                         isRise={true}
                         stockPrice={1200}
                         volatility={4.2}
+                    />
+                    <PinIcon
+                        slot="pin"
+                        isPinned={true}
+                        stockCode={"005920"}
+                    />
+                </StockCardDefault>
+                <StockCardDefault>
+                    <StockCardInfoDefault 
+                        slot="header"
+                        stockName={"메가스터디 교육"}
+                        stockCurrentPrice={79800}
+                        isRise={true}
+                        stockPrice={1200}
+                        volatility={4.2}
+                    />
+                    <PinIcon
+                        slot="pin"
+                        isPinned={true}
+                        stockCode={"005920"}
                     />
                 </StockCardDefault>
             </div>
@@ -76,6 +97,11 @@
                         isRise={true}
                         stockPrice={1200}
                         volatility={4.2}
+                    />
+                    <PinIcon
+                        slot="pin"
+                        isPinned={true}
+                        stockCode={"005920"}
                     />
                     <StockCardWithGraphAndInput
                         slot="graph"

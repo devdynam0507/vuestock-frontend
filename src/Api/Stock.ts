@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { ErrorResponse } from './common/CommonDtos';
 
 export class StockCurrentPriceResponse {
-    constructor(readonly previousDayPriceDiffpreviousDayPriceDiff: number,
+    constructor(readonly previousDayPriceDiff: number,
                 readonly previousDaySign: string,
                 readonly priviousDayPriceDiffPercent: number,
                 readonly currentPrice: number,
@@ -23,10 +23,11 @@ export class StockCurrentPriceResponse {
     }
 
     static fromDistribution(data: any) {
+        console.log(data);
         return new StockCurrentPriceResponse(
             data.previousDayPriceDiff,
             data.previousDaySign,
-            data.priviousDayPriceDiffPercent,
+            data.previousDayPriceDiffPercent,
             data.currentPrice,
             data.time,
             data.date,
