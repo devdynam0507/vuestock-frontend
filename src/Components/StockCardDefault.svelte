@@ -1,4 +1,5 @@
-<script lang="ts"></script>
+<script lang="ts">
+</script>
 
 <style>
     .card-default {
@@ -23,11 +24,6 @@
         width: 20%;
         justify-content: flex-end;
     }
-
-    .card-default .right i {
-        font-size: large;
-        cursor: pointer;
-    }
     
     .card-default .header {
         display: flex;
@@ -40,7 +36,7 @@
             <slot name="header"></slot>
         </div>
         <div class="right">
-            <i class="mi mi-pin"></i>
+            <slot name="pin"></slot>
         </div>
     </div>
     <slot name="graph"></slot>

@@ -8,6 +8,14 @@
     import StockCardDefault from "../Components/StockCardDefault.svelte";
     import StockCardInfoDefault from "../Components/StockCardInfoDefault.svelte";
     import StockCardWithGraphAndInput from "../Components/StockCardWithGraphAndInput.svelte";
+    import PinIcon from "../Icons/PinIcon.svelte";
+    import { getUserInterestedStocks, StockPinResponse } from "../Api/StockPin";
+    import { onMount } from "svelte";
+
+    let interestedStocks: StockPinResponse[] = [];
+    onMount(async () => {
+        interestedStocks = await getUserInterestedStocks();
+    })
 </script>
 
 <div class="content">
@@ -32,6 +40,11 @@
                         stockPrice={1200}
                         volatility={4.2}
                     />
+                    <PinIcon
+                        slot="pin"
+                        isPinned={false}
+                        stockCode={"005920"}
+                    />
                 </StockCardDefault>
                 <StockCardDefault>
                     <StockCardInfoDefault 
@@ -42,15 +55,10 @@
                         stockPrice={1200}
                         volatility={4.2}
                     />
-                </StockCardDefault>
-                <StockCardDefault>
-                    <StockCardInfoDefault 
-                        slot="header"
-                        stockName={"메가스터디 교육"}
-                        stockCurrentPrice={79800}
-                        isRise={true}
-                        stockPrice={1200}
-                        volatility={4.2}
+                    <PinIcon
+                        slot="pin"
+                        isPinned={true}
+                        stockCode={"005920"}
                     />
                 </StockCardDefault>
                 <StockCardDefault>
@@ -61,45 +69,61 @@
                         isRise={true}
                         stockPrice={1200}
                         volatility={4.2}
+                    />
+                    <PinIcon
+                        slot="pin"
+                        isPinned={true}
+                        stockCode={"005920"}
+                    />
+                </StockCardDefault>
+                <StockCardDefault>
+                    <StockCardInfoDefault 
+                        slot="header"
+                        stockName={"메가스터디 교육"}
+                        stockCurrentPrice={79800}
+                        isRise={true}
+                        stockPrice={1200}
+                        volatility={4.2}
+                    />
+                    <PinIcon
+                        slot="pin"
+                        isPinned={true}
+                        stockCode={"005920"}
                     />
                 </StockCardDefault>
             </div>
         </div>
+        {#if interestedStocks.length > 0}
         <div class="popular-container">
             <p>관심 종목</p>
             <div class="popular-list">
-                <StockCardDefault>
-                    <StockCardInfoDefault 
-                        slot="header"
-                        stockName={"메가스터디 교육"}
-                        stockCurrentPrice={79800}
-                        isRise={true}
-                        stockPrice={1200}
-                        volatility={4.2}
-                    />
-                    <StockCardWithGraphAndInput
-                        slot="graph"
-                        isRise={true}/>
-                    <StockCardAlarmInput slot="input"/>
-                </StockCardDefault>
-
-                <StockCardDefault>
-                    <StockCardInfoDefault 
-                        slot="header"
-                        stockName={"삼성전자"}
-                        stockCurrentPrice={5000}
-                        isRise={false}
-                        stockPrice={120}
-                        volatility={1.2}
-                    />
-                    <StockCardWithGraphAndInput
-                        slot="graph"
-                        isRise={false}/>
-                    <StockCardAlarmInput slot="input"/>
-                </StockCardDefault>
+                {#each interestedStocks as stock}
+                    <StockCardDefault>
+                        <StockCardInfoDefault
+                            slot="header"
+                            stockName={stock.stockName}
+                            stockCurrentPrice={stock.stockPrice.currentPrice}
+                            isRise={stock.stockPrice.previousDayPriceDiff > 0}
+                            stockPrice={stock.stockPrice.previousDayPriceDiff}
+                            volatility={stock.stockPrice.priviousDayPriceDiffPercent}
+                        />
+                        <PinIcon
+                            slot="pin"
+                            isPinned={true}
+                            stockCode={stock.stockCode}
+                        />
+                        <StockCardWithGraphAndInput
+                            slot="graph"
+                            isRise={stock.stockPrice.previousDayPriceDiff > 0}
+                            stockCode={stock.stockCode}/>
+                        <StockCardAlarmInput slot="input"/>
+                    </StockCardDefault>
+                {/each}
             </div>
         </div>
-        <!-- <NoInterested/> -->
+        {:else}
+            <NoInterested/>
+        {/if}
     </div>
 </div>
 
