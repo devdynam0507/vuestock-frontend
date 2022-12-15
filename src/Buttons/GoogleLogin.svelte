@@ -2,7 +2,7 @@
     let src = 'images/google-signin.png';
 
     function login() {
-        location.href = 'http://localhost:8080/oauth2/authorization/google'
+        location.href = 'http://api.stockvue.kr:8080/oauth2/authorization/google'
     }
 </script>
 

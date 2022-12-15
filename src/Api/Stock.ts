@@ -23,7 +23,6 @@ export class StockCurrentPriceResponse {
     }
 
     static fromDistribution(data: any) {
-        console.log(data);
         return new StockCurrentPriceResponse(
             data.previousDayPriceDiff,
             data.previousDaySign,
@@ -54,7 +53,7 @@ export class StockDistributionResponse {
 export async function getCurrentStock(stockCode: string): Promise<StockCurrentPriceResponse | ErrorResponse> {
     try {
         const response: AxiosResponse = 
-            await axios.get(`http://localhost:8080/api/v1/stock?stockCode=${stockCode}`);
+            await axios.get(`http://api.stockvue.kr:8080/api/v1/stock?stockCode=${stockCode}`);
         return StockCurrentPriceResponse.ofAxios(response.data);
     }
     catch(error) {
@@ -66,7 +65,7 @@ export async function getCurrentStock(stockCode: string): Promise<StockCurrentPr
 export async function getDistributions(stockCode: string, lastViewTimeMills: number): Promise<StockDistributionResponse | ErrorResponse> {
     try {
         const response: AxiosResponse =
-            await axios.get(`http://localhost:8080/api/v1/stock/distributions?stockCode=${stockCode}&dateMills=${lastViewTimeMills}`);
+            await axios.get(`http://api.stockvue.kr:8080/api/v1/stock/distributions?stockCode=${stockCode}&dateMills=${lastViewTimeMills}`);
         return StockDistributionResponse.ofAxios(response.data);
     }
     catch(error) {

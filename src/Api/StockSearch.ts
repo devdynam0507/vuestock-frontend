@@ -28,7 +28,7 @@ export class StockSearchResultWithPrices {
 export async function searchByStockName(stockName: string): Promise<StockSearchResultWithPrices[] | ErrorResponse> {
     try {
         const response: AxiosResponse =
-            await axios.get(`http://localhost:8080/api/v1/stock/search/multiple?stockName=${stockName}`);
+            await axios.get(`http://api.stockvue.kr:8080/api/v1/stock/search/multiple?stockName=${stockName}`);
         return StockSearchResultWithPrices.ofAxiosArrayResponse(response.data);
     }
     catch(e) {
